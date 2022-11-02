@@ -8,7 +8,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.77.0"
 
-  name                 = "education"
+  name                 = "${var.random_pet.random}-education"
   cidr                 = "10.0.0.0/16"
   azs                  = data.aws_availability_zones.available.names
   public_subnets       = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
@@ -17,16 +17,16 @@ module "vpc" {
 }
 
 resource "aws_db_subnet_group" "education" {
-  name       = "education"
+  name       = "${var.random_pet.random}-education"
   subnet_ids = module.vpc.public_subnets
 
   tags = {
-    Name = "Education"
+    Name = "${var.random_pet.random}-education"
   }
 }
 
 resource "aws_security_group" "rds" {
-  name   = "education_rds"
+  name   = "${var.random_pet.random}-education_rds"
   vpc_id = module.vpc.vpc_id
 
   ingress {
@@ -44,12 +44,12 @@ resource "aws_security_group" "rds" {
   }
 
   tags = {
-    Name = "education_rds"
+    Name = "${var.random_pet.random}_education_rds"
   }
 }
 
 resource "aws_db_parameter_group" "education" {
-  name   = "education"
+  name   = "${var.random_pet.random}-education"
   family = "postgres14"
 
   parameter {
